@@ -1,0 +1,21 @@
+# ROS 2 / colcon and CMake build outputs
+build/
+install/
+log/
+
+# Editors and IDEs
+.vscode/
+.idea/
+
+# Python caches
+__pycache__/
+*.py[cod]
+
+# rosbag2 data: publish large bags through Release or external storage
+*.db3
+
+# OS files
+.DS_Store
+
+# Internal release plan: contains unreleased task details
+docs/
