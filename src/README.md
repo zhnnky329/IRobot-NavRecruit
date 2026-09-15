@@ -4,11 +4,11 @@
 
 | 目录 | 类型 | 构建方式 | 学生是否应修改 |
 |---|---|---|---|
-| `FAST_LIO/` | 第三方算法快照，含队内适配 | `ament_cmake` / `colcon` | 默认不修改核心算法 |
-| `livox_ros_driver2_humble/` | 第三方/厂商驱动 | `ament_cmake_auto` / `colcon` | 默认不修改核心功能 |
-| `livox_to_scan/` | 队内提供工具 | `ament_cmake` / `colcon` | 可配置使用；修改须说明原因 |
-| `pcd_to_nav_map/` | 队内提供的独立 CMake 工具 | CMake，已由 `COLCON_IGNORE` 排除 | 可配置使用；不是 ROS package |
-| `student/` | 学生代码入口 | `ament_cmake` / `colcon` | 是 |
+| `FAST_LIO/` | fastlio里程计 | `ament_cmake` / `colcon` | 默认不修改核心算法 |
+| `livox_ros_driver2_humble/` | livox mid360驱动 | `ament_cmake_auto` / `colcon` | 默认不修改核心功能 |
+| `livox_to_scan/` | livox点云转scan工具 | `ament_cmake` / `colcon` | 可配置使用；修改须说明原因 |
+| `pcd_to_nav_map/` | pcd转换为nav2所需格式map工具 | CMake，已由 `COLCON_IGNORE` 排除 | 可配置使用；不是 ROS package |
+| `develop/` | 考核开发代码入口 | `ament_cmake` / `colcon` | 是 |
 
 ## ROS 2 workspace
 
