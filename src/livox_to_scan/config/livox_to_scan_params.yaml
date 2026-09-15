@@ -24,7 +24,7 @@ livox_to_scan_node:
     output_topic: "/scan"
     
     # 队列大小
-    queue_size: 50
-    
-    # 调试：每帧打印多少个点的详细信息（0 表示不打印）
-    debug_points: 0
+    queue_size: 20
+
+    # 等待外参 TF 的最长时间，避免单帧阻塞回调
+    transform_timeout: 0.1

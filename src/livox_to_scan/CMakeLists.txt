@@ -9,6 +9,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(livox_ros_driver2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
@@ -17,6 +18,7 @@ add_executable(livox_to_scan_node src/livox_to_scan_node.cpp)
 ament_target_dependencies(livox_to_scan_node 
   rclcpp 
   sensor_msgs 
+  geometry_msgs
   livox_ros_driver2
   tf2_ros
   tf2_geometry_msgs

@@ -7,6 +7,8 @@
 #include <geometry_msgs/msg/point_stamped.hpp>
 #include <cmath>
 #include <limits>
+#include <stdexcept>
+#include <string>
 
 class LivoxToScanNode : public rclcpp::Node
 {
@@ -25,7 +27,11 @@ public:
     this->declare_parameter("scan_time", 0.1);
     this->declare_parameter("range_min", 0.1);
     this->declare_parameter("range_max", 100.0);
-    this->declare_parameter("target_frame", "base_link"); // 固定参考系
+    this->declare_parameter("target_frame", "base_link");
+    this->declare_parameter("input_topic", "/livox/lidar");
+    this->declare_parameter("output_topic", "/scan");
+    this->declare_parameter("queue_size", 20);
+    this->declare_parameter("transform_timeout", 0.1);
 
     min_height_ = this->get_parameter("min_height").as_double();
     max_height_ = this->get_parameter("max_height").as_double();
@@ -36,15 +42,28 @@ public:
     range_min_ = this->get_parameter("range_min").as_double();
     range_max_ = this->get_parameter("range_max").as_double();
     target_frame_ = this->get_parameter("target_frame").as_string();
+    input_topic_ = this->get_parameter("input_topic").as_string();
+    output_topic_ = this->get_parameter("output_topic").as_string();
+    queue_size_ = static_cast<int>(this->get_parameter("queue_size").as_int());
+    transform_timeout_ = this->get_parameter("transform_timeout").as_double();
+
+    if (angle_increment_ <= 0.0 || angle_max_ <= angle_min_ ||
+        range_max_ <= range_min_ || max_height_ <= min_height_ || queue_size_ <= 0) {
+      throw std::invalid_argument("livox_to_scan 参数范围无效");
+    }
+
+    rclcpp::SensorDataQoS sensor_qos;
+    sensor_qos.keep_last(static_cast<size_t>(queue_size_));
 
     cloud_sub_ = this->create_subscription<livox_ros_driver2::msg::CustomMsg>(
-        "/livox/lidar", 10,
+        input_topic_, sensor_qos,
         std::bind(&LivoxToScanNode::cloudCallback, this, std::placeholders::_1));
 
-    scan_pub_ = this->create_publisher<sensor_msgs::msg::LaserScan>("/scan", 10);
+    scan_pub_ = this->create_publisher<sensor_msgs::msg::LaserScan>(output_topic_, sensor_qos);
 
     RCLCPP_INFO(this->get_logger(), "========================================");
-    RCLCPP_INFO(this->get_logger(), "Livox → LaserScan 启动 (target_frame: %s)", target_frame_.c_str());
+    RCLCPP_INFO(this->get_logger(), "Livox -> LaserScan: %s -> %s, frame=%s",
+                input_topic_.c_str(), output_topic_.c_str(), target_frame_.c_str());
     RCLCPP_INFO(this->get_logger(), "========================================");
   }
 
@@ -56,7 +75,7 @@ private:
     try {
       transform = tf_buffer_.lookupTransform(
           target_frame_, msg->header.frame_id, 
-          msg->header.stamp, rclcpp::Duration::from_seconds(20.0));
+          msg->header.stamp, rclcpp::Duration::from_seconds(transform_timeout_));
     } catch (const tf2::TransformException &ex) {
       RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 2000,
                            "无法获取 TF %s → %s: %s", 
@@ -127,7 +146,9 @@ private:
   double angle_min_, angle_max_;
   double angle_increment_, scan_time_;
   double range_min_, range_max_;
-  std::string target_frame_;
+  double transform_timeout_;
+  int queue_size_;
+  std::string target_frame_, input_topic_, output_topic_;
 };
 
 int main(int argc, char **argv)

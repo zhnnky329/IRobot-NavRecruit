@@ -34,9 +34,9 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        body:
+        livox_frame:
           Value: true
-        camera_init:
+        odom:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -44,8 +44,8 @@ Visualization Manager:
       Show Axes: true
       Show Names: false
       Tree:
-        camera_init:
-          body:
+        odom:
+          livox_frame:
             {}
       Update Interval: 0
       Value: true
@@ -86,7 +86,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /Odometry
+        Value: /odom
       Value: true
     - Alpha: 1
       Buffer Length: 1
@@ -221,7 +221,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 0; 0; 0
-    Fixed Frame: camera_init
+    Fixed Frame: odom
     Frame Rate: 30
   Name: root
   Tools:
