@@ -16,6 +16,3 @@ __pycache__/
 
 # OS files
 .DS_Store
-
-# Internal release plan: contains unreleased task details
-docs/

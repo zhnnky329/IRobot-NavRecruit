@@ -1,36 +1,7 @@
-# Develop Workspace
+# 大考核开发区
 
-考核自行实现和维护的 ROS 2 package 放在本目录。不要复制或修改第三方核心算法来完成作业。
+请将最终大考核中自行实现和维护的 ROS 2 package 放在本目录，不要复制或随意修改第三方核心算法。
 
-## Task 1
+建议参考nav2的bringup包结构拉起所有packages。
 
-从零创建：
-
-```text
-laser_safety_monitor/
-```
-
-仓库不提供该 package 的完整框架或标准答案。正式要求见群内分享的飞书文档。
-
-## Task 2 起
-
-建议创建并持续维护：
-
-```text
-nav_recruit_bringup/
-├── launch/
-│   ├── sensor.launch.py
-│   ├── mapping.launch.py
-│   ├── localization.launch.py
-│   └── navigation.launch.py
-├── config/
-│   ├── sensor.yaml
-│   ├── fast_lio.yaml
-│   ├── amcl.yaml
-│   └── nav2.yaml
-├── maps/
-└── rviz/
-```
-
-这是推荐的最终形态，不要求现在一次性创建所有文件。每周只新增当前任务真正需要并且已经验证的部分。
-
+仓库中应只保留实际使用并完成验证的内容，同时在自己的 README 中写清构建、启动、Topic、TF、参数修改、问题排查和 AI 使用情况。

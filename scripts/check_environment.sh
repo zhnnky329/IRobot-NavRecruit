@@ -5,15 +5,15 @@ set -u
 failures=0
 
 pass() {
-  printf '[PASS] %s\n' "$1"
+  printf '[通过] %s\n' "$1"
 }
 
 warn() {
-  printf '[WARN] %s\n' "$1"
+  printf '[警告] %s\n' "$1"
 }
 
 fail() {
-  printf '[FAIL] %s\n' "$1"
+  printf '[失败] %s\n' "$1"
   failures=$((failures + 1))
 }
 
@@ -21,20 +21,20 @@ if [[ -r /etc/os-release ]]; then
   # shellcheck disable=SC1091
   source /etc/os-release
   if [[ "${ID:-}" == "ubuntu" && "${VERSION_ID:-}" == "22.04" ]]; then
-    pass "Ubuntu ${VERSION_ID}"
+    pass "操作系统为 Ubuntu ${VERSION_ID}"
   else
-    fail "Expected Ubuntu 22.04, found ${PRETTY_NAME:-unknown system}"
+    fail "要求使用 Ubuntu 22.04，当前系统为 ${PRETTY_NAME:-未知系统}"
   fi
 else
-  fail "Cannot read /etc/os-release"
+  fail "无法读取 /etc/os-release"
 fi
 
 if [[ "${ROS_DISTRO:-}" == "humble" ]]; then
-  pass "ROS_DISTRO=humble"
+  pass "ROS 2 发行版为 Humble"
 elif [[ -z "${ROS_DISTRO:-}" ]]; then
-  fail "ROS_DISTRO is unset; run: source /opt/ros/humble/setup.bash"
+  fail "未设置 ROS_DISTRO，请先执行：source /opt/ros/humble/setup.bash"
 else
-  fail "Expected ROS_DISTRO=humble, found ROS_DISTRO=${ROS_DISTRO}"
+  fail "要求使用 ROS 2 Humble，当前 ROS_DISTRO=${ROS_DISTRO}"
 fi
 
 check_command() {
@@ -42,35 +42,35 @@ check_command() {
   local hint="$2"
 
   if command -v "$command_name" >/dev/null 2>&1; then
-    pass "$command_name"
+    pass "已找到命令：$command_name"
   else
-    fail "$command_name not found; $hint"
+    fail "未找到命令：$command_name；$hint"
   fi
 }
 
-check_command ros2 "install ROS 2 Humble and source its setup.bash"
-check_command colcon "install python3-colcon-common-extensions"
-check_command git "install Git"
-check_command cmake "install CMake"
-check_command python3 "install Python 3"
+check_command ros2 "请安装 ROS 2 Humble 并加载其 setup.bash"
+check_command colcon "请安装 python3-colcon-common-extensions"
+check_command git "请安装 Git"
+check_command cmake "请安装 CMake"
+check_command python3 "请安装 Python 3"
 
-architecture="$(uname -m 2>/dev/null || printf 'unknown')"
+architecture="$(uname -m 2>/dev/null || printf '未知')"
 if [[ "$architecture" == "x86_64" ]]; then
-  pass "architecture=x86_64"
+  pass "系统架构为 x86_64"
 else
-  warn "architecture=${architecture}; the bundled Livox SDK library is x86-64"
+  warn "当前系统架构为 ${architecture}，仓库附带的 Livox SDK 动态库仅适用于 x86-64"
 fi
 
 if [[ -e /usr/local/lib/liblivox_lidar_sdk_shared.so ]]; then
-  pass "Livox-SDK2 library"
+  pass "已找到 Livox-SDK2 动态库"
 else
-  warn "Livox-SDK2 library not found in /usr/local/lib; Tasks 2-3 may not build"
+  warn "未在 /usr/local/lib 中找到 Livox-SDK2 动态库，相关驱动可能无法构建"
 fi
 
 if ((failures == 0)); then
-  printf '[PASS] Environment check completed\n'
+  printf '[通过] 环境检查完成\n'
   exit 0
 fi
 
-printf '[FAIL] Environment check completed with %d failure(s)\n' "$failures"
+printf '[失败] 环境检查完成，共发现 %d 个失败项\n' "$failures"
 exit 1
