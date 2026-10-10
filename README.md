@@ -39,33 +39,7 @@ Nav2 自主到点导航
 
 请持续提交能够体现开发过程的 Commit。不要在考核结束时把全部内容一次性提交，也不要提交无法解释或没有实机验证的代码。
 
-## 仓库结构
-
-```text
-IRobot-NavRecruit/
-├── scripts/
-│   └── check_environment.sh     #环境检查脚本
-└── src/
-    ├── FAST_LIO/
-    ├── develop/
-    ├── livox_ros_driver2_humble/
-    ├── livox_to_scan/
-    └── pcd_to_nav_map/
-```
-
-各目录用途如下：
-
-
-| 目录                              | 用途                | 说明                                  |
-| ------------------------------- | ----------------- | ----------------------------------- |
-| `src/FAST_LIO/`                 | 指定的 FAST-LIO 程序   | 默认不要修改核心算法；确需修改时必须说明原因              |
-| `src/livox_ros_driver2_humble/` | Livox MID360 驱动   | 根据实机网络和传感器配置使用                      |
-| `src/livox_to_scan/`            | 点云转换为二维 LaserScan | 可根据实际 Topic、Frame 和裁剪范围配置           |
-| `src/pcd_to_nav_map/`           | PCD 转导航地图工具       | 独立 CMake 工程，已通过 `COLCON_IGNORE` 排除  |
-| `src/develop/`                  | 考核开发区             | 自己编写的代码、Launch、YAML、地图和 RViz 配置放在这里 |
-
-
-请勿提交 `build/`、`install/`、`log/`、IDE 配置、Python 缓存、大型 rosbag 或无关文件。大型视频、rosbag 和 PCD 建议通过指定方式提供，并在 README 中给出链接和说明。
+请勿提交 `build/`、`install/`、`log/`、IDE 配置、Python 缓存、大型 rosbag 或无关文件。大型视频、rosbag 和 PCD 建议通过其他方式提供，并在 README 中给出链接和说明。
 
 ## 环境与构建
 
